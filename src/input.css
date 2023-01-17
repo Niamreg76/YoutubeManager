@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.titre{
+    text-shadow: rgba(237,0,0,1) 0px 0px 19px;
+}
+
+.nostyle{
+  text-shadow: none;
+}
+
+.span1{
+    font-size: 1.3em;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-image: linear-gradient(rgba(237,0,0,1), rgba(237,0,0,1));
+    background-size: 100% 5px;
+    background-repeat: no-repeat;
+    background-position: 100% 0%;
+     transition: background-size .7s, background-position .5s ease-in-out;
+}
+  
+  .span1:hover{
+    background-size: 100% 100%;
+    background-position: 0% 100%;
+    transition: background-position .7s, background-size .5s ease-in-out;
+  }
+
+
+  @import url('https://fonts.googleapis.com/css?family=Barlow:800&display=swap');
+
+  .rouge{
+    color: black;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  
+  .rouge:hover{
+    color: black;
+    text-shadow: 0 0 5px red,
+                0 0 25px red,
+                0 0 50px red,
+                0 0 100px red;
+  }
+
+  .nowrap{
+    white-space: nowrap;
+  }
+  .margintest{
+    margin-left: 500px;
+  }
+

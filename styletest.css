@@ -1,0 +1,86 @@
+*{
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.marginleft{
+    margin-left: 50px;
+
+}
+.marginleft .input{
+    border-color: rgb(234 88 12);
+    border-style: solid;
+}
+
+header{
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: 0px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    align-items: center;
+    background-color: black;
+}
+p{
+    font-family: Inter;
+}
+.header-milieu a{
+    padding-left: 45px;
+    text-decoration: none;
+    color: white;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: 'Inter';
+    font-size: 1.2rem;
+}
+
+.header-milieu a:hover{
+    text-shadow: rgba(237,0,0,1) 0px 0px 5px;
+}
+
+.header-droite a{
+    background-color: #ea6d27;
+    border: #ea6d27;
+    padding: 17px 32px 19px 32px;
+    box-shadow: 0px 15px 30px
+        rgba(0, 0, 0, 0.15);
+    border-radius: 15px 5px 15px 5px;
+    color: white;
+    text-decoration: none;
+}
+.header-gauche a{
+    text-decoration: none;
+    text-shadow: rgba(237,0,0,1) 0px 0px 19px;
+    color: white;
+    font-size: 2rem;
+    font-weight: 800;
+    background-clip: text;
+}
+
+.aligncenter{
+    margin-left: 35%;
+    background-color: white;
+    margin-right: 35%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 2%;
+    
+}
+
+
+
+/* ---- reset ---- */ 
+body{ margin:0; font:normal 75% Arial, Helvetica, sans-serif; } 
+canvas{ display: block; vertical-align: bottom; }
+ /* ---- particles.js container ---- */ 
+ #particles-js{ position: fixed; width: 100%; height: 100%; background-color: #b61924; background-image: url(""); background-repeat: no-repeat; background-size: cover; background-position: 50% 50%; 
+}
+  /* ---- stats.js ---- */ 
+  .count-particles{ background: #000022; position: absolute; top: 480px; left: 0; width: 80px; color: #13E8E9; font-size: .8em; text-align: left; text-indent: 4px; line-height: 14px; padding-bottom: 2px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; } 
+  .js-count-particles{ font-size: 1.1em; } 
+  #stats, .count-particles{ -webkit-user-select: none; margin-top: 5px; margin-left: 5px; } 
+  #stats{ border-radius: 3px 3px 0 0; overflow: hidden; } 
+  .count-particles{ border-radius: 0 0 3px 3px; }
+
+  .flexeur{
+    display: flex;
+  }
