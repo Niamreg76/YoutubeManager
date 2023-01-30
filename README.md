@@ -1,12 +1,14 @@
- * Library Requirements
- *
- * 1. Install composer (https://getcomposer.org)
- * 2. On the command line, change to this directory (api-samples/php)
- * 3. Require the google/apiclient library
- *    $ composer require google/apiclient:~2.0
+  Library Requirements
+ 
+  1. Install composer (https://getcomposer.org)
+  2. On the command line, change to this directory (api-samples/php)
+  3. Require the google/apiclient library
+     $ composer require google/apiclient:~2.0
 
 Tailwind
 Run on server for php
+Need a youtube API Key on google console
+Need URL authorizations to avoid URI mismatch errors
 
 Need a database for the access token 
 
@@ -18,4 +20,5 @@ Upload page :
 ![image](https://user-images.githubusercontent.com/84070314/215552132-c43b5dcc-ceec-4bf6-b1c2-02d8e36c7a33.png)
 
 Search page : 
-![image](https://user-images.githubusercontent.com/84070314/215552219-420771b8-d984-4b50-a0ed-b66384dbcddd.png)
+![image](https://user-images.githubusercontent.com/84070314/215552514-39768004-18b4-48e8-a420-f5096499efd8.png)
+
