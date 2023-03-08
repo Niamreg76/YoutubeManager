@@ -29,27 +29,21 @@ $htmlBody = <<<END
 </form>
 END;
 
-// This code will execute if the user entered a search query in the form
-// and submitted the form. Otherwise, the page displays the form above.
+// Le code va s'éxécuter uniquement si le formulaire a été soumis
 if (isset($_GET['q']) && isset($_GET['maxResults'])) {
-  /*
-   * Set $DEVELOPER_KEY to the "API key" value from the "Access" tab of the
-   * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
-   * Please ensure that you have enabled the YouTube Data API for your project.
-   */
+  // Définir une clé de développeur pour accéder aux API de YouTube
   $DEVELOPER_KEY = 'AIzaSyBsNJ73LB8TTAArgT_IYfo35yXllkrDPYs';
 
   $client = new Google_Client();
   $client->setDeveloperKey($DEVELOPER_KEY);
 
-  // Define an object that will be used to make all API requests.
+  // Définir un objet pour accéder aux API de YouTube
   $youtube = new Google_Service_YouTube($client);
 
   $htmlBody = '';
   try {
 
-    // Call the search.list method to retrieve results matching the specified
-    // query term.
+    // Appeler la méthode search.list de l'API de YouTube pour rechercher des vidéos
     $searchResponse = $youtube->search->listSearch('id,snippet', array(
       'q' => $_GET['q'],
       'maxResults' => $_GET['maxResults'],
@@ -59,8 +53,7 @@ if (isset($_GET['q']) && isset($_GET['maxResults'])) {
     $channels = '';
     $playlists = '';
 
-    // Add each result to the appropriate list, and then display the lists of
-    // matching videos, channels, and playlists.
+    // Ajouter les résultats de la recherche à la page HTML
     foreach ($searchResponse['items'] as $searchResult) {
       switch ($searchResult['id']['kind']) {
         case 'youtube#video':

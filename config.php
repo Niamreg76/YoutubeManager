@@ -15,7 +15,7 @@ $config = [
                 ],
     'scope'    => 'https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.upload',
     'authorize_url_parameters' => [
-            'approval_prompt' => 'force', // to pass only when you need to acquire a new refresh token.
+            'approval_prompt' => 'force', // Seulement si vous voulez que l'utilisateur soit redirigé vers Google pour autoriser l'application à accéder à ses données
             'access_type' => 'offline'
     ]
 ];

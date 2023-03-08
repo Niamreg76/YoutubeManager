@@ -7,7 +7,7 @@
 </head>
 <header>
   <div class="header-gauche">
-    <a href="index.php">Youtube Manager</a>
+    <a href="index.php">YouTube Manager</a>
   </div>
   <div class="header-milieu">
   <nav>

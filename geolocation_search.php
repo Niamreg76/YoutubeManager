@@ -1,18 +1,6 @@
 <?php
 
 /**
- * This sample lists videos that are associated with a particular keyword and are in the radius of
- *   particular geographic coordinates by:
- *
- * 1. Searching videos with "youtube.search.list" method and setting "type", "q", "location" and
- *   "locationRadius" parameters.
- * 2. Retrieving location details for each video with "youtube.videos.list" method and setting
- *   "id" parameter to comma separated list of video IDs in search result.
- *
- * @author Ibrahim Ulukaya
- */
-
-/**
  * Library Requirements
  *
  * 1. Install composer (https://getcomposer.org)
@@ -45,25 +33,19 @@ $htmlBody = <<<END
 </form>
 END;
 
-// This code executes if the user enters a search query in the form
-// and submits the form. Otherwise, the page displays the form above.
+// Le code va s'éxécuter uniquement si le formulaire a été soumis
 if (isset($_GET['q']) && isset($_GET['maxResults'])) {
-  /*
-   * Set $DEVELOPER_KEY to the "API key" value from the "Access" tab of the
-  * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
-  * Please ensure that you have enabled the YouTube Data API for your project.
-  */
+  // Définir une clé de développeur pour accéder aux API de YouTube
   $DEVELOPER_KEY = 'AIzaSyBsNJ73LB8TTAArgT_IYfo35yXllkrDPYs';
 
   $client = new Google_Client();
   $client->setDeveloperKey($DEVELOPER_KEY);
 
-  // Define an object that will be used to make all API requests.
+  // Définir un objet pour accéder aux API de YouTube
   $youtube = new Google_Service_YouTube($client);
 
   try {
-    // Call the search.list method to retrieve results matching the specified
-    // query term.
+    // Appeler la méthode search.list pour récupérer les résultats de recherche
     $searchResponse = $youtube->search->listSearch('id,snippet', array(
         'type' => 'video',
         'q' => $_GET['q'],
@@ -73,20 +55,20 @@ if (isset($_GET['q']) && isset($_GET['maxResults'])) {
     ));
 
     $videoResults = array();
-    # Merge video ids
+    # Fusionner les résultats de recherche pour créer une liste d'identifiants de vidéo
     foreach ($searchResponse['items'] as $searchResult) {
       array_push($videoResults, $searchResult['id']['videoId']);
     }
     $videoIds = join(',', $videoResults);
 
-    # Call the videos.list method to retrieve location details for each video.
+    # Appeler la méthode videos.list pour récupérer les métadonnées des vidéos
     $videosResponse = $youtube->videos->listVideos('snippet, recordingDetails', array(
     'id' => $videoIds,
     ));
 
     $videos = '';
 
-    // Display the list of matching videos.
+    // Afficher les résultats de la recherche
     foreach ($videosResponse['items'] as $videoResult) {
       $videos .= sprintf('<li>%s (%s,%s)</li>',
           $videoResult['snippet']['title'],
@@ -94,6 +76,7 @@ if (isset($_GET['q']) && isset($_GET['maxResults'])) {
           $videoResult['recordingDetails']['location']['longitude']);
     }
 
+    // Afficher les résultats de la recherche en HTML
     $htmlBody .= <<<END
     <h3>Videos</h3>
     <ul>$videos</ul>
@@ -117,7 +100,7 @@ END;
 </head>
 <header>
   <div class="header-gauche">
-    <a href="index.php">Youtube Manager</a>
+    <a href="index.php">YouTube Manager</a>
   </div>
   <div class="header-milieu">
   <nav>

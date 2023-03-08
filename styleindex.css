@@ -14,6 +14,9 @@
     max-width: 30%;
 }
 
+.langage{
+  margin-left: 500px;
+}
 .btn1{
     position: absolute;
     top: 50%;
@@ -46,4 +49,3 @@
   fa:hover{
     color:#fa0000;
   }
-  

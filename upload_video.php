@@ -15,13 +15,7 @@ if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 
-/*
- * You can acquire an OAuth 2.0 client ID and client secret from the
- * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
- * For more information about using OAuth 2.0 to access Google APIs, please see:
- * <https://developers.google.com/youtube/v3/guides/authentication>
- * Please ensure that you have enabled the YouTube Data API for your project.
- */
+
 $OAUTH2_CLIENT_ID = '114821075753-9hq3aups1gnq9386q9o1mpmfn8560e8f.apps.googleusercontent.com';
 $OAUTH2_CLIENT_SECRET = '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';
 
@@ -33,10 +27,10 @@ $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
     FILTER_SANITIZE_URL);
 $client->setRedirectUri($redirect);
 
-// Define an object that will be used to make all API requests.
+// Création d'un objet pour accéder aux API de YouTube
 $youtube = new Google_Service_YouTube($client);
 
-// Check if an auth token exists for the required scopes
+// Vérifier si le token d'accès est présent dans la session
 $tokenSessionKey = 'token-' . $client->prepareScopes();
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
@@ -52,7 +46,7 @@ if (isset($_SESSION[$tokenSessionKey])) {
   $client->setAccessToken($_SESSION[$tokenSessionKey]);
 }
 
-// Check to ensure that the access token was successfully acquired.
+// Vérifier si le token d'accès est valide
 if ($client->getAccessToken()) {
   $htmlBody = '';
   try{
@@ -166,7 +160,7 @@ END;
 </head>
 <header>
   <div class="header-gauche">
-    <a href="index.php">Youtube Manager</a>
+    <a href="index.php">YouTube Manager</a>
   </div>
   <div class="header-milieu">
   <nav>

@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-  
+
 if (isset($_POST['submit'])) {
     $arr_data = array(
         'title' => $_POST['title'],
@@ -9,7 +9,8 @@ if (isset($_POST['submit'])) {
     );
     upload_video_on_youtube($arr_data);
 }
-  
+
+// fonction pour upload une vidéo sur youtube  
 function upload_video_on_youtube($arr_data) {
   
     $client = new Google_Client();
@@ -37,6 +38,7 @@ function upload_video_on_youtube($arr_data) {
     $videoStatus->setPrivacyStatus('public');
     $video->setStatus($videoStatus);
   
+    // Permet d'inserer la vidéo sur youtube
     try {
         $response = $service->videos->insert(
             'snippet,status',
@@ -47,7 +49,9 @@ function upload_video_on_youtube($arr_data) {
                 'uploadType' => 'multipart'
             )
         );
-        echo "Video uploaded successfully. Video ID is ". $response->id;
+        
+        echo '<style> .affichage{
+            display: contents;} </style>';
     } catch(Exception $e) {
         if( 401 == $e->getCode() ) {
             $refresh_token = $db->get_refersh_token();
@@ -80,11 +84,11 @@ function upload_video_on_youtube($arr_data) {
 <html lang="en">
 <head>
     <link href="styletest.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Upload</title>
 </head>
 <header>
   <div class="header-gauche">
-    <a href="index.php">Youtube Manager</a>
+    <a href="index.php">YouTube Manager</a>
   </div>
   <div class="header-milieu">
   <nav>
@@ -102,10 +106,11 @@ function upload_video_on_youtube($arr_data) {
     <div id="particles-js">
         <div class="aligncenter" style="position:relative">
             <form method="post" enctype="multipart/form-data">
-                <p><input type="text" name="title" placeholder="Enter Video Title" /></p>
-                <p><textarea name="summary" cols="30" rows="10" placeholder="Video description"></textarea></p>
+                <p><input class="formstyle" type="text" name="title" placeholder="Enter Video Title" /></p>
+                <p><textarea class="formstyle" name="summary" cols="30" rows="10" placeholder="Video description"></textarea></p>
                 <p><input type="file" name="file" /></p>
-                <input type="submit" name="submit" value="Submit" />
+                <input class="button" type="submit" name="submit" value="Valider" />
+                <p class="affichage">Vidéo uploadé correctement</p>
             </form>           
         </div>
         <script type="text/javascript" src="particles.js"></script>
@@ -113,3 +118,33 @@ function upload_video_on_youtube($arr_data) {
 </body>
 </html>
 
+<style>
+    .affichage{
+        display: none;
+        margin-left: 32%;
+    }
+
+    .formstyle{
+	background-color: #eee;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 90%;
+    }
+
+    .button{
+    border-radius: 20px;
+	border: 1px solid #FF4B2B;
+    background-color: rgb(220 38 38);
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+    margin-left: 35%; margin-top: 10px;
+    }
+    .button:hover{
+        scale: 1.05;
+    }
+
+</style>

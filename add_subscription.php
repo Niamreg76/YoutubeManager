@@ -15,13 +15,6 @@ if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 
-/*
- * You can acquire an OAuth 2.0 client ID and client secret from the
- * {{ Google Cloud Console }} <{{ https://cloud.google.com/console }}>
- * For more information about using OAuth 2.0 to access Google APIs, please see:
- * <https://developers.google.com/youtube/v3/guides/authentication>
- * Please ensure that you have enabled the YouTube Data API for your project.
- */
 $OAUTH2_CLIENT_ID = '114821075753-9hq3aups1gnq9386q9o1mpmfn8560e8f.apps.googleusercontent.com';
 $OAUTH2_CLIENT_SECRET = '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';
 
@@ -33,10 +26,10 @@ $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
     FILTER_SANITIZE_URL);
 $client->setRedirectUri($redirect);
 
-// Define an object that will be used to make all API requests.
+// Définir un objet pour accéder aux API de YouTube
 $youtube = new Google_Service_YouTube($client);
 
-// Check if an auth token exists for the required scopes
+// Vérifier si un token d'accès est présent dans la session
 $tokenSessionKey = 'token-' . $client->prepareScopes();
 if (isset($_GET['code'])) {
   if (strval($_SESSION['state']) !== strval($_GET['state'])) {
@@ -52,28 +45,26 @@ if (isset($_SESSION[$tokenSessionKey])) {
   $client->setAccessToken($_SESSION[$tokenSessionKey]);
 }
 
-// Check to ensure that the access token was successfully acquired.
+// Vérifier si le client a un token d'accès valide
 if ($client->getAccessToken()) {
   $htmlBody = '';
   try {
-    // This code subscribes the authenticated user to the specified channel.
+    // Vérifier si l'utilisateur a déjà souscrit à la chaîne
 
-    // Identify the resource being subscribed to by specifying its channel ID
-    // and kind.
+    // Créer un objet de ressource ID et définir son ID de chaîne
     $resourceId = new Google_Service_YouTube_ResourceId();
     $resourceId->setChannelId('UC571C3e-cb52wcgROyBEpeQ');
     $resourceId->setKind('youtube#channel');
 
-    // Create a snippet object and set its resource ID.
+    // Créer un objet de snippet de souscription et définir la ressource ID
     $subscriptionSnippet = new Google_Service_YouTube_SubscriptionSnippet();
     $subscriptionSnippet->setResourceId($resourceId);
 
-    // Create a subscription request that contains the snippet object.
+    // Créer un objet de souscription et définir le snippet
     $subscription = new Google_Service_YouTube_Subscription();
     $subscription->setSnippet($subscriptionSnippet);
 
-    // Execute the request and return an object containing information
-    // about the new subscription.
+    // Appeler la méthode API subscriptions.insert pour ajouter la souscription
     $subscriptionResponse = $youtube->subscriptions->insert('id,snippet',
         $subscription, array());
 
@@ -101,7 +92,7 @@ if ($client->getAccessToken()) {
   <p>
 END;
 } else {
-  // If the user has not authorized the application, start the OAuth 2.0 flow.
+  // Définir l'état de la session afin de vérifier la correspondance de l'état lors de la redirection
   $state = mt_rand();
   $client->setState($state);
   $_SESSION['state'] = $state;

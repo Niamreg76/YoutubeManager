@@ -15,7 +15,6 @@ if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
 require_once __DIR__ . '/vendor/autoload.php';
 session_start();
 
-
 $OAUTH2_CLIENT_ID = '114821075753-9hq3aups1gnq9386q9o1mpmfn8560e8f.apps.googleusercontent.com';
 $OAUTH2_CLIENT_SECRET = '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';
 
@@ -24,9 +23,8 @@ $client->setClientId($OAUTH2_CLIENT_ID);
 $client->setClientSecret($OAUTH2_CLIENT_SECRET);
 $client->setScopes('https://www.googleapis.com/auth/youtube');
 $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],
-    FILTER_SANITIZE_URL);
+  FILTER_SANITIZE_URL);
 $client->setRedirectUri($redirect);
-
 // Définir un objet pour accéder aux API de YouTube
 $youtube = new Google_Service_YouTube($client);
 
@@ -46,65 +44,45 @@ if (isset($_SESSION[$tokenSessionKey])) {
   $client->setAccessToken($_SESSION[$tokenSessionKey]);
 }
 
-// Vérifier si le token d'accès a expiré
+// Vérifier si le client a un token d'accès valide
 if ($client->getAccessToken()) {
-  $htmlBody = '';
-  try{
+  try {
+    // Vérifier si l'utilisateur a autorisé l'application
+    $channelsResponse = $youtube->channels->listChannels('contentDetails', array(
+      'mine' => 'true',
+    ));
 
-    // Remplacer la valeur par l'ID de la vidéo pour laquelle vous souhaitez définir une miniature.
-    $videoId = "XirDe5IlS1Q";
+    $htmlBody = '';
+    foreach ($channelsResponse['items'] as $channel) {
+      // Afficher les détails de la chaîne
+      $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
 
-    // Remplacer par le chemin vers l'image que vous souhaitez utiliser comme miniature.
-    $imagePath = "images/licon.png ";
+      $playlistItemsResponse = $youtube->playlistItems->listPlaylistItems('snippet', array(
+        'playlistId' => $uploadsListId,
+        'maxResults' => 50
+      ));
 
-    // Définir la taille du fichier de la miniature en octets.
-    $chunkSizeBytes = 1 * 1024 * 1024;
-
-    $client->setDefer(true);
-
-    // Créer une demande pour définir la miniature de la vidéo.
-    $setRequest = $youtube->thumbnails->set($videoId);
-
-    // Créer un objet MediaFileUpload et définir sa propriété resumable à true pour indiquer que vous souhaitez télécharger le fichier en plusieurs parties.
-    $media = new Google_Http_MediaFileUpload(
-        $client,
-        $setRequest,
-        'image/png',
-        null,
-        true,
-        $chunkSizeBytes
-    );
-    $media->setFileSize(filesize($imagePath));
+      /* $status = true;
+      $thumbnailUrl = $status['items'][0]['default']['url']; */
 
 
-    // Lire le fichier et l'envoyer en plusieurs morceaux.
-    $status = false;
-    $handle = fopen($imagePath, "rb");
-    while (!$status && !feof($handle)) {
-      $chunk = fread($handle, $chunkSizeBytes);
-      $status = $media->nextChunk($chunk);
+      $htmlBody .= "<h2>Liste des vidéo $uploadsListId</h2><ul>";
+      foreach ($playlistItemsResponse['items'] as $playlistItem) {
+        $htmlBody .= sprintf('<li>%s (%s)</li>', $playlistItem['snippet']['title'],
+          $playlistItem['snippet']['resourceId']['videoId']);
+          $videoId =['videoId'];
+          //echo $playlistItem['items'][0]['snippet']['thumbnails']['high']['url'];
+      }
+      $htmlBody .= '</ul>';
     }
-
-    fclose($handle);
-
-    $client->setDefer(false);
-
-
-    $thumbnailUrl = $status['items'][0]['default']['url'];
-    $htmlBody .= "<h3>Thumbnail Uploaded</h3><ul>";
-    $htmlBody .= sprintf('<li>%s (%s)</li>',
-        $videoId,
-        $thumbnailUrl);
-    $htmlBody .= sprintf('<img src="%s">', $thumbnailUrl);
-    $htmlBody .= '</ul>';
 
 
   } catch (Google_Service_Exception $e) {
-    $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
-        htmlspecialchars($e->getMessage()));
+    $htmlBody = sprintf('<p>A service error occurred: <code>%s</code></p>',
+      htmlspecialchars($e->getMessage()));
   } catch (Google_Exception $e) {
-    $htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
-        htmlspecialchars($e->getMessage()));
+    $htmlBody = sprintf('<p>An client error occurred: <code>%s</code></p>',
+      htmlspecialchars($e->getMessage()));
   }
 
   $_SESSION[$tokenSessionKey] = $client->getAccessToken();
@@ -117,26 +95,28 @@ if ($client->getAccessToken()) {
   <p>
 END;
 } else {
-  // Si aucun token d'accès n'est présent dans la session, demander à l'utilisateur d'autoriser l'application
   $state = mt_rand();
   $client->setState($state);
   $_SESSION['state'] = $state;
 
   $authUrl = $client->createAuthUrl();
   $htmlBody = <<<END
-<h3>Authorization Required</h3>
-<p>You need to <a href="$authUrl">authorize access</a> before proceeding.<p>
+  <h3>Connexion nécessaire</h3>
+  <p>You need to <a href="$authUrl">authorize access</a> before proceeding.<p>
 END;
 }
+
+
 ?>
 
 <!doctype html>
 <html>
-<head>
-<link href="styletest.css" rel="stylesheet">
-<title>Claim Uploaded</title>
-</head>
-<header>
+  <head>
+    <link href="styletest.css" rel="stylesheet">
+    <title>My Uploads</title>
+  </head>
+
+  <header>
   <div class="header-gauche">
     <a href="index.php">YouTube Manager</a>
   </div>
@@ -152,12 +132,17 @@ END;
   <div class="header-droite">
   </div>
 </header>
-<body>
+  <body>
+
     <div id="particles-js">
         <div class="aligncenter" style="position:relative">
         <?=$htmlBody?>      
-    </div>
+      </div>
       <script type="text/javascript" src="particles.js"></script>
       <script type="text/javascript" src="app.js"></script>
-</body>
+
+    </div>
+
+  </body>
 </html>
+
