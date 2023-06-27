@@ -1,3 +1,5 @@
+https://summonersinfo.alwaysdata.net/YTManager/php/
+
   Library Requirements
  
   1. Install composer (https://getcomposer.org)
